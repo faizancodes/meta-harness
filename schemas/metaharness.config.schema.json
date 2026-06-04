@@ -1,0 +1,172 @@
+{
+  "$id": "https://metaharness.dev/schemas/metaharness.config.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "defaultProvider": {
+      "type": "string",
+      "enum": ["mock", "claude", "cursor", "codex"]
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "file": { "type": "string", "minLength": 1 },
+        "inline": {
+          "type": "object",
+          "propertyNames": { "type": "string" },
+          "additionalProperties": {}
+        }
+      },
+      "additionalProperties": false
+    },
+    "providers": {
+      "type": "object",
+      "properties": {
+        "claude": {
+          "type": "object",
+          "properties": {
+            "apiKeyEnv": { "type": "string", "minLength": 1 },
+            "auth": {
+              "type": "object",
+              "propertyNames": { "type": "string" },
+              "additionalProperties": { "type": "string" }
+            },
+            "model": { "type": "string", "minLength": 1 },
+            "native": {
+              "type": "object",
+              "propertyNames": { "type": "string" },
+              "additionalProperties": {}
+            },
+            "provider": {
+              "type": "string",
+              "enum": ["mock", "claude", "cursor", "codex"]
+            },
+            "runtime": { "type": "string", "enum": ["local", "cloud", "self-hosted"] }
+          },
+          "required": ["provider"],
+          "additionalProperties": false,
+          "title": "metaharness provider config"
+        },
+        "codex": {
+          "type": "object",
+          "properties": {
+            "apiKeyEnv": { "type": "string", "minLength": 1 },
+            "auth": {
+              "type": "object",
+              "propertyNames": { "type": "string" },
+              "additionalProperties": { "type": "string" }
+            },
+            "model": { "type": "string", "minLength": 1 },
+            "native": {
+              "type": "object",
+              "propertyNames": { "type": "string" },
+              "additionalProperties": {}
+            },
+            "provider": {
+              "type": "string",
+              "enum": ["mock", "claude", "cursor", "codex"]
+            },
+            "runtime": { "type": "string", "enum": ["local", "cloud", "self-hosted"] }
+          },
+          "required": ["provider"],
+          "additionalProperties": false,
+          "title": "metaharness provider config"
+        },
+        "cursor": {
+          "type": "object",
+          "properties": {
+            "apiKeyEnv": { "type": "string", "minLength": 1 },
+            "auth": {
+              "type": "object",
+              "propertyNames": { "type": "string" },
+              "additionalProperties": { "type": "string" }
+            },
+            "model": { "type": "string", "minLength": 1 },
+            "native": {
+              "type": "object",
+              "propertyNames": { "type": "string" },
+              "additionalProperties": {}
+            },
+            "provider": {
+              "type": "string",
+              "enum": ["mock", "claude", "cursor", "codex"]
+            },
+            "runtime": { "type": "string", "enum": ["local", "cloud", "self-hosted"] }
+          },
+          "required": ["provider"],
+          "additionalProperties": false,
+          "title": "metaharness provider config"
+        },
+        "mock": {
+          "type": "object",
+          "properties": {
+            "apiKeyEnv": { "type": "string", "minLength": 1 },
+            "auth": {
+              "type": "object",
+              "propertyNames": { "type": "string" },
+              "additionalProperties": { "type": "string" }
+            },
+            "model": { "type": "string", "minLength": 1 },
+            "native": {
+              "type": "object",
+              "propertyNames": { "type": "string" },
+              "additionalProperties": {}
+            },
+            "provider": {
+              "type": "string",
+              "enum": ["mock", "claude", "cursor", "codex"]
+            },
+            "runtime": { "type": "string", "enum": ["local", "cloud", "self-hosted"] }
+          },
+          "required": ["provider"],
+          "additionalProperties": false,
+          "title": "metaharness provider config"
+        }
+      },
+      "additionalProperties": false
+    },
+    "rawEvents": { "type": "boolean" },
+    "storage": {
+      "type": "object",
+      "properties": {
+        "redactSecrets": { "type": "boolean" },
+        "rootDir": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "telemetry": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "exporter": { "type": "string", "enum": ["none", "console", "otlp"] },
+        "serviceName": { "type": "string", "minLength": 1 },
+        "serviceVersion": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "workspace": {
+      "type": "object",
+      "properties": {
+        "cwd": { "type": "string", "minLength": 1 },
+        "git": {
+          "type": "object",
+          "properties": {
+            "baseRef": { "type": "string", "minLength": 1 },
+            "branchPrefix": { "type": "string", "minLength": 1 },
+            "commitChanges": { "type": "boolean" },
+            "createWorktree": { "type": "boolean" },
+            "requireClean": { "type": "boolean" },
+            "worktreeRoot": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["cwd"],
+      "additionalProperties": false,
+      "title": "metaharness workspace config"
+    }
+  },
+  "required": ["workspace"],
+  "additionalProperties": false,
+  "title": "metaharness config"
+}

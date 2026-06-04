@@ -1,0 +1,8 @@
+dist/
+node_modules/
+.harness/
+.ignore
+.gitignore
+.env
+.env.*
+!.env.example

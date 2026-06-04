@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+    "ignoreDeprecations": "6.0",
+    "isolatedModules": true,
+    "lib": ["ES2023"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "paths": {
+      "@metaharness/adapter-mock": ["./packages/adapter-mock/src/index.ts"],
+      "@metaharness/claude": ["./packages/claude/src/index.ts"],
+      "@metaharness/cli": ["./packages/cli/src/index.ts"],
+      "@metaharness/codex": ["./packages/codex/src/index.ts"],
+      "@metaharness/core": ["./packages/core/src/index.ts"],
+      "@metaharness/cursor": ["./packages/cursor/src/index.ts"],
+      "@metaharness/github-action": ["./packages/github-action/src/index.ts"],
+      "@metaharness/policy": ["./packages/policy/src/index.ts"],
+      "@metaharness/telemetry": ["./packages/telemetry/src/index.ts"]
+    },
+    "resolveJsonModule": true,
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2023",
+    "types": ["node"],
+    "verbatimModuleSyntax": true
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "name": "@metaharness/claude",
+  "version": "0.0.0",
+  "description": "Claude Agent SDK adapter for metaharness with provider-aware capabilities and events.",
+  "keywords": [
+    "metaharness",
+    "coding-agents",
+    "ai-agents",
+    "automation",
+    "claude",
+    "adapter"
+  ],
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --sourcemap --clean --target node22 --platform node --splitting false --external @metaharness/core --external @metaharness/policy --external @anthropic-ai/claude-agent-sdk",
+    "test": "vitest run --config ../../vitest.config.ts --project claude",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@metaharness/core": "workspace:*",
+    "@metaharness/policy": "workspace:*",
+    "@opentelemetry/api": "1.9.1",
+    "yaml": "2.9.0",
+    "zod": "4.4.3"
+  },
+  "peerDependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.161"
+  },
+  "peerDependenciesMeta": {
+    "@anthropic-ai/claude-agent-sdk": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "25.9.1",
+    "tsup": "8.5.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.8"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "@metaharness/policy",
+  "version": "0.0.0",
+  "description": "Policy parser, validator, compiler, command guard, and redaction helpers for metaharness.",
+  "keywords": [
+    "metaharness",
+    "coding-agents",
+    "ai-agents",
+    "automation",
+    "policy",
+    "security"
+  ],
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --sourcemap --clean --target node22 --platform node --splitting false --external @metaharness/core",
+    "test": "vitest run --config ../../vitest.config.ts --project policy",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@metaharness/core": "workspace:*",
+    "@opentelemetry/api": "1.9.1",
+    "yaml": "2.9.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "25.9.1",
+    "tsup": "8.5.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.8"
+  }
+}

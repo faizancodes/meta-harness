@@ -1,0 +1,294 @@
+{
+  "$id": "https://metaharness.dev/schemas/session-ledger.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["patch", "branch", "pull_request", "file", "url", "unknown"]
+          },
+          "name": { "type": "string" },
+          "path": { "type": "string" },
+          "url": { "type": "string" }
+        },
+        "required": ["kind"],
+        "additionalProperties": false
+      }
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "command": { "type": "string" },
+          "cwd": { "type": "string" },
+          "exitCode": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "outputSummary": { "type": "string" },
+          "ts": { "type": "string" }
+        },
+        "required": ["command", "ts"],
+        "additionalProperties": false
+      }
+    },
+    "createdAt": { "type": "string" },
+    "diff": {
+      "type": "object",
+      "properties": {
+        "patchPath": { "type": "string" },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "deletions": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+            "filesChanged": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "insertions": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+          },
+          "required": ["filesChanged"],
+          "additionalProperties": false
+        },
+        "unifiedDiff": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "events": {
+      "type": "object",
+      "properties": {
+        "counts": {
+          "type": "object",
+          "propertyNames": { "type": "string" },
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "eventLogPath": { "type": "string" },
+        "rawEventLogPath": { "type": "string" }
+      },
+      "required": ["counts", "eventLogPath"],
+      "additionalProperties": false
+    },
+    "files": {
+      "type": "object",
+      "properties": {
+        "changed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "diff": { "type": "string" },
+              "kind": {
+                "type": "string",
+                "enum": ["create", "modify", "delete", "rename", "unknown"]
+              },
+              "path": { "type": "string" }
+            },
+            "required": ["kind", "path"],
+            "additionalProperties": false
+          }
+        },
+        "read": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["changed", "read"],
+      "additionalProperties": false
+    },
+    "handoffFrom": {
+      "type": "object",
+      "properties": {
+        "ledgerId": { "type": "string" },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string" }
+      },
+      "required": ["ledgerId", "provider", "runId"],
+      "additionalProperties": false
+    },
+    "ledgerId": { "type": "string" },
+    "plans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": { "type": "string" },
+                "step": { "type": "string" }
+              },
+              "required": ["status", "step"],
+              "additionalProperties": false
+            }
+          },
+          "ts": { "type": "string" }
+        },
+        "required": ["steps", "ts"],
+        "additionalProperties": false
+      }
+    },
+    "provider": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "model": { "type": "string" },
+        "nativeRunId": { "type": "string" },
+        "nativeSessionId": { "type": "string" },
+        "nativeUrl": { "type": "string" },
+        "runtime": { "type": "string", "enum": ["local", "cloud", "self-hosted"] }
+      },
+      "required": ["id"],
+      "additionalProperties": false
+    },
+    "schemaVersion": { "type": "string", "const": "metaharness.session-ledger.v1" },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "facts": { "type": "array", "items": { "type": "string" } },
+        "failureReason": { "type": "string" },
+        "finalMessage": { "type": "string" },
+        "nextSteps": { "type": "array", "items": { "type": "string" } },
+        "openQuestions": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["facts", "nextSteps", "openQuestions"],
+      "additionalProperties": false
+    },
+    "task": {
+      "type": "object",
+      "properties": {
+        "desiredOutput": {
+          "type": "string",
+          "enum": ["message", "patch", "branch", "pull_request"]
+        },
+        "mode": { "type": "string", "enum": ["ask", "edit", "review", "plan", "custom"] },
+        "normalizedPrompt": { "type": "string" },
+        "originalPrompt": { "type": "string" }
+      },
+      "required": ["mode", "originalPrompt"],
+      "additionalProperties": false
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "inputSummary": { "type": "string" },
+          "kind": { "type": "string" },
+          "name": { "type": "string" },
+          "outputSummary": { "type": "string" },
+          "ts": { "type": "string" }
+        },
+        "required": ["kind", "name", "ts"],
+        "additionalProperties": false
+      }
+    },
+    "transcript": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "providerEventRef": { "type": "string" },
+          "role": { "type": "string", "enum": ["user", "assistant", "tool", "system"] },
+          "summary": { "type": "string" },
+          "text": { "type": "string" },
+          "ts": { "type": "string" }
+        },
+        "required": ["role", "ts"],
+        "additionalProperties": false
+      }
+    },
+    "updatedAt": { "type": "string" },
+    "usage": {
+      "type": "object",
+      "properties": {
+        "cacheReadTokens": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "cacheWriteTokens": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "estimatedCostUsd": { "type": "number", "minimum": 0 },
+        "inputTokens": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "outputTokens": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "totalTokens": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "command": { "type": "string" },
+          "exitCode": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "outputPath": { "type": "string" },
+          "summary": { "type": "string" }
+        },
+        "required": ["command"],
+        "additionalProperties": false
+      }
+    },
+    "workspace": {
+      "type": "object",
+      "properties": {
+        "cwd": { "type": "string" },
+        "dirtyAfter": { "type": "boolean" },
+        "dirtyBefore": { "type": "boolean" },
+        "repo": {
+          "type": "object",
+          "properties": {
+            "baseRef": { "type": "string" },
+            "branch": { "type": "string" },
+            "endingCommit": { "type": "string" },
+            "headRef": { "type": "string" },
+            "remoteUrl": { "type": "string" },
+            "startingCommit": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["cwd", "dirtyAfter", "dirtyBefore"],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "artifacts",
+    "commands",
+    "createdAt",
+    "diff",
+    "events",
+    "files",
+    "ledgerId",
+    "plans",
+    "provider",
+    "schemaVersion",
+    "summary",
+    "task",
+    "tools",
+    "transcript",
+    "updatedAt",
+    "verification",
+    "workspace"
+  ],
+  "additionalProperties": false,
+  "title": "metaharness session ledger"
+}

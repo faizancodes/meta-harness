@@ -1,0 +1,81 @@
+{
+  "name": "@metaharness/cli",
+  "version": "0.0.0",
+  "description": "hk CLI for running, resuming, comparing, handing off, and auditing coding-agent runs with metaharness.",
+  "keywords": [
+    "metaharness",
+    "coding-agents",
+    "ai-agents",
+    "automation",
+    "cli",
+    "workflow"
+  ],
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "hk": "./dist/index.js",
+    "metaharness": "./dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --sourcemap --clean --target node22 --platform node --splitting false --external @metaharness/core --external @metaharness/adapter-mock --external @metaharness/claude --external @metaharness/codex --external @metaharness/cursor --external @metaharness/policy --external @metaharness/telemetry",
+    "hk": "node dist/index.js",
+    "test": "vitest run --config ../../vitest.config.ts --project cli",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@metaharness/adapter-mock": "workspace:*",
+    "@metaharness/claude": "workspace:*",
+    "@metaharness/codex": "workspace:*",
+    "@metaharness/core": "workspace:*",
+    "@metaharness/cursor": "workspace:*",
+    "@metaharness/policy": "workspace:*",
+    "@metaharness/telemetry": "workspace:*",
+    "@opentelemetry/api": "1.9.1",
+    "@opentelemetry/exporter-trace-otlp-proto": "0.218.0",
+    "@opentelemetry/resources": "2.7.1",
+    "@opentelemetry/sdk-node": "0.218.0",
+    "@opentelemetry/sdk-trace-base": "2.7.1",
+    "@opentelemetry/semantic-conventions": "1.41.1",
+    "commander": "15.0.0",
+    "yaml": "2.9.0",
+    "zod": "4.4.3"
+  },
+  "peerDependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.161",
+    "@cursor/sdk": "^1.0.17",
+    "@openai/codex-sdk": "^0.136.0"
+  },
+  "peerDependenciesMeta": {
+    "@anthropic-ai/claude-agent-sdk": {
+      "optional": true
+    },
+    "@cursor/sdk": {
+      "optional": true
+    },
+    "@openai/codex-sdk": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "25.9.1",
+    "tsup": "8.5.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.8"
+  }
+}

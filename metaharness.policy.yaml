@@ -1,0 +1,71 @@
+version: 1
+filesystem:
+  mode: workspace-write
+  writableRoots:
+    - "."
+  deny:
+    - ".env"
+    - ".env.local"
+    - ".env.*.local"
+    - ".env.development"
+    - ".env.production"
+    - ".env.test"
+    - ".env.staging"
+    - "**/id_rsa"
+    - "**/.aws/**"
+    - "**/.ssh/**"
+    - "**/node_modules/**"
+network:
+  mode: deny-by-default
+  allowHosts:
+    - "registry.npmjs.org"
+    - "pypi.org"
+commands:
+  default: deny
+  allow:
+    - "npm test"
+    - "npm run test"
+    - "npm run lint"
+    - "pnpm test"
+    - "pnpm lint"
+    - "pytest"
+    - "git diff"
+    - "git diff *"
+    - "git status"
+    - "git log *"
+  deny:
+    - "rm -rf *"
+    - "curl * | sh"
+    - "wget * | sh"
+    - "gh secret *"
+    - "aws secretsmanager *"
+    - "printenv"
+    - "env"
+approvals:
+  requireHumanFor:
+    - outsideWorkspaceWrite
+    - destructiveCommand
+    - network
+    - secretsAccess
+secrets:
+  redactEnv:
+    - "OPENAI_API_KEY"
+    - "ANTHROPIC_API_KEY"
+    - "CURSOR_API_KEY"
+    - "GITHUB_TOKEN"
+  redactPatterns:
+    - "sk-[A-Za-z0-9_-]{20,}"
+    - "ghp_[A-Za-z0-9_]{20,}"
+limits:
+  maxTurns: 30
+  maxDurationMs: 1800000
+  maxCostUsd: 10
+  maxFilesChanged: 25
+  maxDiffBytes: 500000
+providerOverrides:
+  claude:
+    settingSources: []
+  codex:
+    sandbox: workspace-write
+  cursor:
+    runtime: local

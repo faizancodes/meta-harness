@@ -1,0 +1,235 @@
+{
+  "$id": "https://metaharness.dev/schemas/metaharness.policy.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "version": { "type": "number", "const": 1 },
+    "filesystem": {
+      "default": {
+        "deny": [
+          ".env",
+          ".env.local",
+          ".env.*.local",
+          ".env.development",
+          ".env.production",
+          ".env.test",
+          ".env.staging",
+          "**/id_rsa",
+          "**/.aws/**",
+          "**/.ssh/**",
+          "**/node_modules/**"
+        ],
+        "mode": "workspace-write",
+        "writableRoots": ["."]
+      },
+      "type": "object",
+      "properties": {
+        "mode": {
+          "default": "workspace-write",
+          "type": "string",
+          "enum": ["read-only", "workspace-write", "full-access"]
+        },
+        "writableRoots": {
+          "default": ["."],
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "deny": {
+          "default": [
+            ".env",
+            ".env.local",
+            ".env.*.local",
+            ".env.development",
+            ".env.production",
+            ".env.test",
+            ".env.staging",
+            "**/id_rsa",
+            "**/.aws/**",
+            "**/.ssh/**",
+            "**/node_modules/**"
+          ],
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "required": ["mode", "writableRoots", "deny"],
+      "additionalProperties": false
+    },
+    "network": {
+      "default": { "allowHosts": [], "mode": "deny-by-default" },
+      "type": "object",
+      "properties": {
+        "mode": {
+          "default": "deny-by-default",
+          "type": "string",
+          "enum": ["allow", "deny-by-default", "provider-default"]
+        },
+        "allowHosts": {
+          "default": [],
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "required": ["mode", "allowHosts"],
+      "additionalProperties": false
+    },
+    "commands": {
+      "default": {
+        "allow": [],
+        "default": "deny",
+        "deny": [
+          "rm -rf *",
+          "curl * | sh",
+          "wget * | sh",
+          "gh secret *",
+          "aws secretsmanager *",
+          "printenv",
+          "env"
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "default": { "default": "deny", "type": "string", "enum": ["allow", "deny"] },
+        "allow": {
+          "default": [],
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "deny": {
+          "default": [
+            "rm -rf *",
+            "curl * | sh",
+            "wget * | sh",
+            "gh secret *",
+            "aws secretsmanager *",
+            "printenv",
+            "env"
+          ],
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "required": ["default", "allow", "deny"],
+      "additionalProperties": false
+    },
+    "approvals": {
+      "default": { "requireHumanFor": [] },
+      "type": "object",
+      "properties": {
+        "requireHumanFor": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "outsideWorkspaceWrite",
+              "destructiveCommand",
+              "network",
+              "secretsAccess"
+            ]
+          }
+        }
+      },
+      "required": ["requireHumanFor"],
+      "additionalProperties": false
+    },
+    "secrets": {
+      "default": {
+        "redactEnv": [
+          "OPENAI_API_KEY",
+          "ANTHROPIC_API_KEY",
+          "CURSOR_API_KEY",
+          "GITHUB_TOKEN"
+        ],
+        "redactPatterns": ["sk-[A-Za-z0-9_-]{20,}", "ghp_[A-Za-z0-9_]{20,}"]
+      },
+      "type": "object",
+      "properties": {
+        "redactEnv": {
+          "default": [
+            "OPENAI_API_KEY",
+            "ANTHROPIC_API_KEY",
+            "CURSOR_API_KEY",
+            "GITHUB_TOKEN"
+          ],
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "redactPatterns": {
+          "default": ["sk-[A-Za-z0-9_-]{20,}", "ghp_[A-Za-z0-9_]{20,}"],
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "required": ["redactEnv", "redactPatterns"],
+      "additionalProperties": false
+    },
+    "limits": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "maxTurns": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "maxDurationMs": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "maxCostUsd": { "type": "number", "exclusiveMinimum": 0 },
+        "maxFilesChanged": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "maxDiffBytes": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "additionalProperties": false
+    },
+    "providerOverrides": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "claude": {
+          "type": "object",
+          "propertyNames": { "type": "string" },
+          "additionalProperties": {}
+        },
+        "codex": {
+          "type": "object",
+          "propertyNames": { "type": "string" },
+          "additionalProperties": {}
+        },
+        "cursor": {
+          "type": "object",
+          "propertyNames": { "type": "string" },
+          "additionalProperties": {}
+        },
+        "mock": {
+          "type": "object",
+          "propertyNames": { "type": "string" },
+          "additionalProperties": {}
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "version",
+    "filesystem",
+    "network",
+    "commands",
+    "approvals",
+    "secrets",
+    "limits",
+    "providerOverrides"
+  ],
+  "additionalProperties": false,
+  "title": "metaharness policy"
+}

@@ -1,0 +1,758 @@
+{
+  "$id": "https://metaharness.dev/schemas/event.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "run.started" },
+        "input": {
+          "type": "object",
+          "properties": {
+            "taskHash": { "type": "string", "minLength": 1 },
+            "mode": {
+              "type": "string",
+              "enum": ["ask", "edit", "review", "plan", "custom"]
+            },
+            "cwd": { "type": "string" }
+          },
+          "required": ["taskHash", "mode"],
+          "additionalProperties": {}
+        }
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type", "input"],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "run.status" },
+        "status": {
+          "type": "string",
+          "enum": [
+            "queued",
+            "starting",
+            "running",
+            "waiting_for_approval",
+            "cancelling",
+            "completed",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "message": { "type": "string" }
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type", "status"],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "assistant.message.delta" },
+        "text": { "type": "string" },
+        "phase": { "type": "string", "enum": ["commentary", "final", "unknown"] }
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type", "text"],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "assistant.message.completed" },
+        "text": { "type": "string" },
+        "phase": { "type": "string", "enum": ["commentary", "final", "unknown"] }
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type", "text"],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "plan.updated" },
+        "explanation": { "type": "string" },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["pending", "in_progress", "completed", "cancelled", "failed"]
+              }
+            },
+            "required": ["step", "status"],
+            "additionalProperties": {}
+          }
+        }
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type", "steps"],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "tool.started" },
+        "tool": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "kind": {
+              "type": "string",
+              "enum": ["mcp", "built_in", "dynamic", "provider_native", "unknown"]
+            },
+            "server": { "type": "string" }
+          },
+          "required": ["name", "kind"],
+          "additionalProperties": {}
+        },
+        "input": {}
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type", "tool"],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "tool.delta" },
+        "toolCallId": { "type": "string" },
+        "text": { "type": "string" },
+        "data": {}
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type"],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "tool.finished" },
+        "tool": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "kind": {
+              "type": "string",
+              "enum": ["mcp", "built_in", "dynamic", "provider_native", "unknown"]
+            },
+            "server": { "type": "string" }
+          },
+          "required": ["name", "kind"],
+          "additionalProperties": {}
+        },
+        "output": {},
+        "error": {
+          "type": "object",
+          "properties": {
+            "message": { "type": "string" },
+            "code": { "type": "string" },
+            "providerCode": { "type": "string" },
+            "retryable": { "type": "boolean" },
+            "cause": {}
+          },
+          "required": ["message"],
+          "additionalProperties": {}
+        }
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type", "tool"],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "command.started" },
+        "command": { "type": "string" },
+        "cwd": { "type": "string" },
+        "reason": { "type": "string" }
+      },
+      "required": [
+        "id",
+        "ts",
+        "provider",
+        "runId",
+        "sessionId",
+        "seq",
+        "type",
+        "command"
+      ],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "command.output.delta" },
+        "commandId": { "type": "string" },
+        "stream": {
+          "type": "string",
+          "enum": ["stdout", "stderr", "combined", "unknown"]
+        },
+        "text": { "type": "string" }
+      },
+      "required": [
+        "id",
+        "ts",
+        "provider",
+        "runId",
+        "sessionId",
+        "seq",
+        "type",
+        "stream",
+        "text"
+      ],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "command.finished" },
+        "command": { "type": "string" },
+        "cwd": { "type": "string" },
+        "exitCode": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "durationMs": { "type": "number", "minimum": 0 },
+        "outputSummary": { "type": "string" },
+        "error": {
+          "type": "object",
+          "properties": {
+            "message": { "type": "string" },
+            "code": { "type": "string" },
+            "providerCode": { "type": "string" },
+            "retryable": { "type": "boolean" },
+            "cause": {}
+          },
+          "required": ["message"],
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "id",
+        "ts",
+        "provider",
+        "runId",
+        "sessionId",
+        "seq",
+        "type",
+        "command"
+      ],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "file.change.started" },
+        "path": { "type": "string" },
+        "changeKind": {
+          "type": "string",
+          "enum": ["create", "modify", "delete", "rename", "unknown"]
+        }
+      },
+      "required": [
+        "id",
+        "ts",
+        "provider",
+        "runId",
+        "sessionId",
+        "seq",
+        "type",
+        "path",
+        "changeKind"
+      ],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "file.change.updated" },
+        "path": { "type": "string" },
+        "diff": { "type": "string" }
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type", "path"],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "file.change.finished" },
+        "path": { "type": "string" },
+        "changeKind": {
+          "type": "string",
+          "enum": ["create", "modify", "delete", "rename", "unknown"]
+        },
+        "diff": { "type": "string" },
+        "status": { "type": "string", "enum": ["completed", "failed", "declined"] }
+      },
+      "required": [
+        "id",
+        "ts",
+        "provider",
+        "runId",
+        "sessionId",
+        "seq",
+        "type",
+        "path",
+        "changeKind",
+        "status"
+      ],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "diff.updated" },
+        "unifiedDiff": { "type": "string" }
+      },
+      "required": [
+        "id",
+        "ts",
+        "provider",
+        "runId",
+        "sessionId",
+        "seq",
+        "type",
+        "unifiedDiff"
+      ],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "approval.requested" },
+        "approvalId": { "type": "string" },
+        "category": {
+          "type": "string",
+          "enum": [
+            "command",
+            "file_change",
+            "network",
+            "mcp_tool",
+            "provider_native",
+            "unknown"
+          ]
+        },
+        "reason": { "type": "string" },
+        "preview": {
+          "type": "object",
+          "properties": {
+            "command": { "type": "string" },
+            "cwd": { "type": "string" },
+            "path": { "type": "string" },
+            "diff": { "type": "string" },
+            "host": { "type": "string" },
+            "protocol": { "type": "string" }
+          },
+          "additionalProperties": {}
+        },
+        "availableDecisions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["accept", "accept_for_session", "decline", "cancel"]
+          }
+        },
+        "native": {}
+      },
+      "required": [
+        "id",
+        "ts",
+        "provider",
+        "runId",
+        "sessionId",
+        "seq",
+        "type",
+        "approvalId",
+        "category",
+        "availableDecisions"
+      ],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "approval.resolved" },
+        "approvalId": { "type": "string" },
+        "decision": {
+          "type": "string",
+          "enum": ["accept", "accept_for_session", "decline", "cancel"]
+        }
+      },
+      "required": [
+        "id",
+        "ts",
+        "provider",
+        "runId",
+        "sessionId",
+        "seq",
+        "type",
+        "approvalId",
+        "decision"
+      ],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "usage.updated" },
+        "usage": {
+          "type": "object",
+          "properties": {
+            "inputTokens": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "outputTokens": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "cacheReadTokens": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "cacheWriteTokens": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "totalTokens": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "estimatedCostUsd": { "type": "number", "minimum": 0 }
+          },
+          "additionalProperties": {}
+        }
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type", "usage"],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "artifact.created" },
+        "artifact": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "patch",
+                "branch",
+                "pull_request",
+                "file",
+                "screenshot",
+                "url",
+                "unknown"
+              ]
+            },
+            "name": { "type": "string" },
+            "path": { "type": "string" },
+            "url": { "type": "string" },
+            "metadata": {
+              "type": "object",
+              "propertyNames": { "type": "string" },
+              "additionalProperties": {}
+            }
+          },
+          "required": ["kind"],
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "id",
+        "ts",
+        "provider",
+        "runId",
+        "sessionId",
+        "seq",
+        "type",
+        "artifact"
+      ],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "error" },
+        "error": {
+          "type": "object",
+          "properties": {
+            "message": { "type": "string" },
+            "code": { "type": "string" },
+            "providerCode": { "type": "string" },
+            "retryable": { "type": "boolean" },
+            "cause": {}
+          },
+          "required": ["message"],
+          "additionalProperties": {}
+        }
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type", "error"],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "run.completed" },
+        "status": { "type": "string", "enum": ["success", "failed", "cancelled"] },
+        "finalMessage": { "type": "string" },
+        "result": {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "type": "string",
+              "enum": ["mock", "claude", "cursor", "codex"]
+            },
+            "runId": { "type": "string" },
+            "sessionId": { "type": "string" },
+            "nativeRunId": { "type": "string" },
+            "nativeSessionId": { "type": "string" },
+            "status": { "type": "string", "enum": ["success", "failed", "cancelled"] },
+            "finalMessage": { "type": "string" },
+            "diff": { "type": "string" },
+            "patchPath": { "type": "string" },
+            "ledgerPath": { "type": "string" },
+            "handoffPath": { "type": "string" },
+            "eventLogPath": { "type": "string" },
+            "verificationLogPath": { "type": "string" },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "patch",
+                      "branch",
+                      "pull_request",
+                      "file",
+                      "screenshot",
+                      "url",
+                      "unknown"
+                    ]
+                  },
+                  "name": { "type": "string" },
+                  "path": { "type": "string" },
+                  "url": { "type": "string" },
+                  "metadata": {
+                    "type": "object",
+                    "propertyNames": { "type": "string" },
+                    "additionalProperties": {}
+                  }
+                },
+                "required": ["kind"],
+                "additionalProperties": {}
+              }
+            },
+            "usage": {
+              "type": "object",
+              "properties": {
+                "inputTokens": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "outputTokens": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "cacheReadTokens": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "cacheWriteTokens": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "totalTokens": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "estimatedCostUsd": { "type": "number", "minimum": 0 }
+              },
+              "additionalProperties": {}
+            },
+            "providerRunUrl": { "type": "string" },
+            "native": {}
+          },
+          "additionalProperties": {}
+        }
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type", "status"],
+      "additionalProperties": {}
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "enum": ["mock", "claude", "cursor", "codex"] },
+        "runId": { "type": "string", "minLength": 1 },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "seq": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "severity": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+        "type": { "type": "string", "const": "provider.raw" },
+        "providerEventType": { "type": "string" },
+        "raw": {}
+      },
+      "required": ["id", "ts", "provider", "runId", "sessionId", "seq", "type", "raw"],
+      "additionalProperties": {}
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "name": "@metaharness/codex",
+  "version": "0.0.0",
+  "description": "Codex SDK and app-server adapter for metaharness with portable events and session ledgers.",
+  "keywords": [
+    "metaharness",
+    "coding-agents",
+    "ai-agents",
+    "automation",
+    "codex",
+    "adapter"
+  ],
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --sourcemap --clean --target node22 --platform node --splitting false --external @metaharness/core --external @openai/codex-sdk",
+    "test": "vitest run --config ../../vitest.config.ts --project codex",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@metaharness/core": "workspace:*",
+    "@opentelemetry/api": "1.9.1",
+    "zod": "4.4.3"
+  },
+  "peerDependencies": {
+    "@openai/codex-sdk": "^0.136.0"
+  },
+  "peerDependenciesMeta": {
+    "@openai/codex-sdk": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "25.9.1",
+    "tsup": "8.5.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.8"
+  }
+}

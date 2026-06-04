@@ -1,0 +1,55 @@
+{
+  "name": "@metaharness/cursor",
+  "version": "0.0.0",
+  "description": "Cursor SDK adapter for metaharness local and cloud coding-agent runs where supported.",
+  "keywords": [
+    "metaharness",
+    "coding-agents",
+    "ai-agents",
+    "automation",
+    "cursor",
+    "adapter"
+  ],
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --sourcemap --clean --target node22 --platform node --splitting false --external @metaharness/core --external @cursor/sdk",
+    "test": "vitest run --config ../../vitest.config.ts --project cursor",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@metaharness/core": "workspace:*",
+    "@opentelemetry/api": "1.9.1",
+    "zod": "4.4.3"
+  },
+  "peerDependencies": {
+    "@cursor/sdk": "^1.0.17"
+  },
+  "peerDependenciesMeta": {
+    "@cursor/sdk": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "25.9.1",
+    "tsup": "8.5.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.8"
+  }
+}

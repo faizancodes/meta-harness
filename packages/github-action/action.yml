@@ -1,0 +1,59 @@
+name: "metaharness Agent"
+description: "Run Claude, Cursor, or Codex coding agents through one harness"
+inputs:
+  provider:
+    required: true
+    description: "claude, cursor, codex, or mock"
+  task:
+    required: false
+    description: "Inline task prompt"
+  task-file:
+    required: false
+    description: "Path to task prompt file"
+  verify:
+    required: false
+    description: "Verification command. Use multiple lines for multiple commands."
+  policy-file:
+    required: false
+    default: "metaharness.policy.yaml"
+    description: "Path to the metaharness policy file. If omitted and the default file is absent, provider defaults apply. An explicit path must exist."
+  config-file:
+    required: false
+    default: "metaharness.config.ts"
+    description: "Path to the metaharness config file. If omitted and the default file is absent, the action uses a provider default config. Keep it plain ESM."
+  fallback-provider:
+    required: false
+    description: "Provider to hand off to if the first provider fails"
+  open-pull-request:
+    required: false
+    default: "false"
+    description: "Create a branch, commit workspace changes outside .harness, push it, and open a pull request."
+  allow-pull-request-target:
+    required: false
+    default: "false"
+    description: "Allow running on pull_request_target. Keep false unless the workflow performs explicit trust checks before invoking metaharness."
+  github-token:
+    required: false
+    description: "GitHub token used only when open-pull-request behavior is enabled"
+outputs:
+  run-id:
+    description: "metaharness run id"
+  status:
+    description: "Final metaharness run status"
+  final-message:
+    description: "Final agent message"
+  patch-file:
+    description: "Generated patch file path"
+  ledger-file:
+    description: "Session ledger path"
+  handoff-file:
+    description: "Handoff markdown path"
+  pull-request-url:
+    description: "Created pull request URL when open-pull-request is true and changes are committed"
+  pull-request-number:
+    description: "Created pull request number when available"
+  pull-request-branch:
+    description: "Branch pushed for the created pull request"
+runs:
+  using: "node20"
+  main: "dist/index.js"

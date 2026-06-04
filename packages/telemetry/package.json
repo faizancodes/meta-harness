@@ -1,0 +1,51 @@
+{
+  "name": "@metaharness/telemetry",
+  "version": "0.0.0",
+  "description": "OpenTelemetry setup helpers for metaharness spans and CLI instrumentation.",
+  "keywords": [
+    "metaharness",
+    "coding-agents",
+    "ai-agents",
+    "automation",
+    "telemetry",
+    "opentelemetry"
+  ],
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --sourcemap --clean --target node22 --platform node --splitting false --external @metaharness/core",
+    "test": "vitest run --config ../../vitest.config.ts --project telemetry",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@metaharness/core": "workspace:*",
+    "@opentelemetry/api": "1.9.1",
+    "@opentelemetry/exporter-trace-otlp-proto": "0.218.0",
+    "@opentelemetry/resources": "2.7.1",
+    "@opentelemetry/sdk-node": "0.218.0",
+    "@opentelemetry/sdk-trace-base": "2.7.1",
+    "@opentelemetry/semantic-conventions": "1.41.1"
+  },
+  "devDependencies": {
+    "@types/node": "25.9.1",
+    "tsup": "8.5.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.8"
+  }
+}

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+.harness/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
